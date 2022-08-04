@@ -1,0 +1,13 @@
+This proposal has the benefit of not adding complexity to the geometric representations.
+ 
+(a) the property type is named something like IfcPropertyMatrixValue, 
+(b) it shouldand have the ability to represent 
+    0. a single value, 
+    1. a list (1D array) values, 
+    2. a table (2Darray ) values, or 
+    3. a volume (3D array) values 
+(c) It should still have a unit property. 
+(d) the Number parameters are implicit in the IfcPropertyMatrixValue values using sizeof() . 
+(e) The Length parameters are implied by the property name matching the name of the geometric item. 
+
+It is then an implementation  option to project the data onto the/a block representation.
