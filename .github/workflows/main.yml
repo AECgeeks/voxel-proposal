@@ -1,0 +1,22 @@
+name: PDF
+
+on: push
+
+jobs:
+  convert_via_pandoc:
+    runs-on: ubuntu-18.04
+    if: ${{ github.event.head_commit.message != 'build' }}    
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: docker://pandoc/latex:2.9
+        with:
+          args: --output=output/voxel-proposal.pdf --toc --pdf-engine xelatex voxel-proposal.md
+          
+      - name: push
+        run: |
+          git config --global user.name 'aothms'
+          git config --global user.email 'aothms@users.noreply.github.com'
+          git add output
+          git commit -m "build"
+          git push
