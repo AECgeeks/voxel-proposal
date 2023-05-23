@@ -4,7 +4,7 @@
 
 The IfcTunnel project proposes a mechanism for storing voxels as geometric items.
 
-This report documents an alternative approach to represent voxels that:
+This report documents an alternative approach to represent voxels leverages property sets and hence:
 
 - has less cross-domain dependencies (no tight coupling between representation, assignment relationships and product)
 - is more general (because it supports 1d, 2d and 3d arrays)
@@ -20,7 +20,9 @@ The voxel grid as proposed by Tunnel is not the shape of an element, it's a cont
 
 As such, the property domain is a much more natural fit for this new paradigm. The solution direction could be to introduce a new IfcProperty subtype to efficiently represent Nd grids of values.
 
-Within the Tunnel project, additional evidence for the property domain being a more natural fit is seen in the cross-domain dependencies introduced in https://github.com/bSI-InfraRoom/IFC-Specification/pull/532 Strict dependencies are created here between product, representation and assignment relationships, which break the modular flexibility and composability that makes IFC a powerful standard. 
+Within the Tunnel project, additional evidence for the property domain being a more natural fit is seen in the cross-domain dependencies introduced in [0]. Strict dependencies are created here between product, representation and assignment relationships by means of where rules. These break the modular flexibility and composability that makes IFC a powerful standard. 
+
+[0] https://github.com/bSI-InfraRoom/IFC-Specification/pull/532 
 
 ## Proposal
 
@@ -30,7 +32,7 @@ Within the Tunnel project, additional evidence for the property domain being a m
 
 > volumetric geological and geotechnical model, usually an interpretation but sometimes created direct from ground penetrating measurement
 
-A placement is required to spatially position and orient the field of values.
+A placement is required to spatially position and orient the field of values. Either a geometric form can be used to spatially bound the values, or only the placement is used in which case `VoxelSizeX`/Y/Z are appended to the property set.
 
 ### "Pset_DensityMatrix"
 
@@ -49,7 +51,7 @@ Within the Tunnel project missing values are encoded by means of an additional f
 
 The usage of a "mask" value would be more efficient, because it wouldn't require an additional array to be supplied. This is a concept in array programming frameworks such as fortran and numpy where one specific sentinel value is chosen to indicate a missing value.
 
-In this way there is also less room for error than unflattening an array to the 3d list of values.
+In this way there is also less room for error as would be the case when requiring to unflatten an array to the 3d list of values.
 
 Property Name | Property Value | Property Type | Property Type
 --------------|----------------|---------------|--------------------
@@ -103,8 +105,8 @@ TYPE IfcMatrix1d = SELECT(
 )
 
 TYPE IfcMatrix2d = SELECT(
-    IfcMatrix1dOfDensityMeasure,
-    IfcMatrix1dOfForceMeasure,
+    IfcMatrix2dOfDensityMeasure,
+    IfcMatrix2dOfForceMeasure,
     ...
 )
 
